@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "# =========================================================================\n# Load libraries and scripts\n# =========================================================================\nsource('data/functions.R')\nlibraries()\n\n\n# =========================================================================\n# GET parsed data from parser.R script into dataframes\n# =========================================================================\ndataframes <- list(\n  studios = get_data_studios(),\n  oscars = get_data_oscars(),\n  actors = get_data_actors(),\n  directors = get_data_directors(),\n  producers = get_data_producers()\n)\n\n\n# =========================================================================\n# ui.R variables\n# =========================================================================\nchoices <- list(\n    studios = unique(dataframes$studios$STUDIO),\n    studios_years = unique(dataframes$studios$YEAR),\n    actors = unique(dataframes$actors$PERSON),\n    oscars_years = unique(dataframes$oscars$YEAR),\n    directors = unique(dataframes$directors$PERSON),\n    producers = unique(dataframes$producers$PERSON),\n    oscars_metric = c(\"BOXOFFICE\", \"NOMINATIONS\", \"WINS\", \"WIN_PERCENTAGE\"),\n    movies_metric = c(\"BEST_BO\", \"TOTAL_BO\", \"AVERAGE_BO\", \"MOVIES_COUNT\")\n)\n\n\n# =========================================================================\n# server.R variables and functions\n# =========================================================================\nCOLORMAP <- c(\"#ff9800\", \"#9c27b0\", \"#e91e63\")\nD3COLORMAP20 <- c(\"#1f77b4\", \"#aec7e8\", \"#ff7f0e\", \"#ffbb78\", \"#2ca02c\",\n                  \"#98df8a\", \"#d62728\", \"#ff9896\", \"#9467bd\", \"#c5b0d5\",\n                  \"#8c564b\", \"#c49c94\", \"#e377c2\", \"#f7b6d2\", \"#7f7f7f\",\n                  \"#c7c7c7\", \"#bcbd22\", \"#dbdb8d\", \"#17becf\", \"#9edae5\")\n\n# Helper function helper.colormapper\n#\n# @param array: an array to be assigned colors based on its index values\n# @param conditions: condition array to determine which color is assigned (these are basically shiny input UI selections)\n# @return: returns a named vector mapping colors to the original array.\nhelper.colormapper <- function(array, conditions){\n  \n  colormap <- rep(\"gray85\", length(array))\n  foreach( j = 1:length(conditions))%do%{\n    colormap[which(array %in% conditions[j])] <- COLORMAP[j]\n  }\n  \n  names(colormap) <- array\n  return(colormap)\n}\n",
+    "created" : 1493400067503.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "277924898",
+    "id" : "A1202D16",
+    "lastKnownWriteTime" : 1493412394,
+    "last_content_update" : 1493412394121,
+    "path" : "~/GITHUB/RShiny-BoxOfficeMojo-master/global.R",
+    "project_path" : "global.R",
+    "properties" : {
+    },
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
