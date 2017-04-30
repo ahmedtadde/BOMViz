@@ -1,18 +1,20 @@
 # Load libraries
 
 libraries <- function(){
-  library(XML)
-  library(dplyr)
-  library(shiny)
-  library(ggplot2)
-  library(plotly)
-  library(scales)
-  library(grid)
-  library(reshape2)
-  library(data.table)
-  library(DT)
-  library(foreach)
-  options(warn=-1) # turn off unneccessary NON-EXISTING NA warnings in the code from XML library
+  library(pacman)
+  p_load(XML)
+  p_load(dplyr)
+  p_load(shiny)
+  p_load(ggplot2)
+  p_load(plotly)
+  p_load(scales)
+  p_load(RColorBrewer)
+  p_load(grid)
+  p_load(reshape2)
+  p_load(data.table)
+  p_load(DT)
+  p_load(foreach)
+  options(warn=-1) # turn off unneccessary NA warnings in the code from XML library
 
 }
 # =========================================================================
@@ -23,7 +25,7 @@ libraries <- function(){
 # =========================================================================
 get_data_studios <- function() {
     df <- data.frame(NULL)
-    for (year in seq(2000, 2014, by=1)) {
+    for (year in seq(2000, 2016, by=1)) {
         table <- scrape_table_studios(year)  # get data for each year
         df <- rbind_list(df, table)  # bind to final dataframe
     }
@@ -145,7 +147,7 @@ scrape_table_studios <- function(year) {
 # @return: dataframe of table
 # =========================================================================
 scrape_people <- function(role) {
-    url <- sprintf("http://www.boxofficemojo.com/people/?view=%s&sort=sumgross&order=DESC&p=.htm", role)
+    url <- sprintf("http://www.boxofficemojo.com/people/?view=%s&sort=sumgross&p=.htm", role)
     colNames <- c("RANK"="numeric",
                   "PERSON"="character",
                   "TOTAL_BO"="Currency",
@@ -161,4 +163,106 @@ scrape_people <- function(role) {
     # reshape data
     colnames(df) <- names(colNames)
     return(data.table(df))
+}
+
+
+# =========================================================================
+# peopleSelectionColorMapper
+# @param array: an array to be assigned colors based on its index values
+# @param conditions: condition array to determine which color is assigned (these are basically shiny input UI selections)
+# @return: returns a named vector mapping colors to the original array.
+# # =========================================================================
+peopleSelectionColorMapper <- function(array, conditions){
+  
+  colormap <- rep("gray85", length(array))
+  foreach( j = 1:length(conditions))%do%{
+    colormap[which(array %in% conditions[j])] <- peopleSelectionColors[j]
+  }
+  
+  
+  names(colormap) <- array
+  rm(list = c("j"))
+  return(colormap)
+}
+
+
+# =========================================================================
+# @description: returns a barPlot for people data given a role input
+# @param: peopleInput(vector of people selected, string); role(string) ; metricInput(which metric, string); dataframe
+# @return: plotly barPlot for display
+# =========================================================================
+
+barPlotly <- function(peopleInput ="",role ="", metricInput, data){
+  # get data
+  df <- setorderv(copy(data), metricInput)[,PERSON:= factor(PERSON, levels = PERSON, ordered = TRUE )]
+  df[, METRIC:= df[, get(metricInput)]]
+  
+  # Build colormap
+  colormap <- peopleSelectionColorMapper(df$PERSON, peopleInput) 
+  
+  # set axis parameters
+  ax <- list(
+    title = paste0("Metric Value (", metricInput,")"),
+    titlefont= list(
+      family = "Courier New, monospace",
+      size = 15
+    ),
+    zeroline = FALSE,
+    showline = FALSE,
+    showticklabels = TRUE,
+    showgrid = FALSE,
+    tickangle = 0
+  )
+  ay <- list(
+    title = role,
+    titlefont= list(
+      family = "Courier New, monospace",
+      size = 15
+    ),
+    zeroline = FALSE,
+    showline = FALSE,
+    showticklabels = FALSE,
+    showgrid = FALSE
+    
+  )
+  
+  
+  # plotting
+  if(metricInput %in% "MOVIES_COUNT"){
+    plot_ly(
+      df,
+      y = ~PERSON, 
+      x = ~METRIC,
+      color = ~PERSON,
+      type = 'bar', orientation = 'h',
+      colors = colormap,
+      hoverinfo = 'text',
+      text = ~paste0(
+        '</br>', PERSON,
+        '</br> *Total #Movies: ',  METRIC,
+        '</br> Best Grossing Movie: ', BEST_PICTURE
+      )
+    )%>%
+      layout(xaxis = ax, yaxis = ay) -> thePlot
+  }
+  
+  plot_ly(
+    df,
+    y = ~PERSON, 
+    x = ~METRIC,
+    color = ~PERSON,
+    type = 'bar', orientation = 'h',
+    colors = colormap,
+    hoverinfo = 'text',
+    text = ~paste0(
+      '</br>', PERSON,
+      '</br> $', METRIC,' MILLIONS',
+      '</br> Best Grossing Movie: ', BEST_PICTURE
+    )
+  )%>%
+    layout(xaxis = ax, yaxis = ay) -> thePlot
+  
+  rm(list = c("colormap","df","ax", "ay"))
+  
+  return(thePlot)
 }
