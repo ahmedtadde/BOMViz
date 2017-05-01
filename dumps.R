@@ -1,6 +1,7 @@
 
-
-
+source("data/functions.R")
+libraries()
+oscars.movies <- dataframes$oscars$MOVIE
 
 
 

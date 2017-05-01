@@ -41,7 +41,9 @@ get_data_studios <- function() {
 # @description: get Oscar data for all years from boxofficemojo
 # @return: dataframe of Oscar movies
 # =========================================================================
-get_data_oscars <- function() {
+get_data_oscars <- function(updateRecords = "") {
+  
+  if(tolower(updateRecords) %in% "update"){
     url <- "http://www.boxofficemojo.com/oscar/?sort=studio&order=ASC&p=.htm"
     colNames <- c("ROW"="character",
                   "YEAR"="numeric",
@@ -59,11 +61,17 @@ get_data_oscars <- function() {
     # reshape data
     colnames(df) <- names(colNames)
     df <- df %>%
-        select(-ROW) %>%
-        mutate(BOXOFFICE = round(BOXOFFICE / 1000000, 2),
-               WIN_PERCENTAGE = round(WINS / NOMINATIONS, 4)) %>%
-        arrange(-YEAR)
+      select(-ROW) %>%
+      mutate(BOXOFFICE = round(BOXOFFICE / 1000000, 2),
+             WIN_PERCENTAGE = round(WINS / NOMINATIONS, 4)) %>%
+      arrange(-YEAR)
+    
+    data.table::fwrite(df, "data/oscars.csv")
     return(data.table(df))
+  }else{
+    return(fread('data/oscars.csv'))
+    
+  }
 }
 
 
@@ -75,6 +83,7 @@ get_data_oscars <- function() {
 # @return: dataframe of top 50 actors and movies
 # =========================================================================
 get_data_actors <- function() {
+  
     df <- scrape_people("Actor")
     return(data.table(df))
 }
@@ -278,10 +287,27 @@ barPlotly <- function(peopleInput ="",role ="", metricInput, data){
 # =========================================================================
 oscarsMonthsPloty <- function(data){
   data[, FULLDATE:= paste0(data[,RELEASEDATE],"/",data[, YEAR])]
-  data[, MONTHS:= months.Date(as.Date(FULLDATE, "%m/%d/%Y"))]
-  table <- data[, .N, by = MONTHS]
+  data[, MONTH:= months.Date(as.Date(FULLDATE, "%m/%d/%Y"))]
+  table <- data[, .N, by = MONTH]
+  # table[, MOVIES:= rep("", length(table$MONTH))]
+  # names(table) <- c("month","oscars","movies")
+  
   names(table) <- c("month","oscars")
   setorder(table, -oscars,month)
+  
+  # foreach(i= 1:length(table$month))%do%{
+  #   movies <- data[MONTH %in% table$month[i]][,MOVIE]
+  #   
+  #   # foreach(j=1:length(movies), .combine = c)%do%{
+  #   #   paste0("<li> ", movies[j], " </li> ")
+  #   # } -> movies
+  #   
+  #   movies <- paste0(movies,collapse = ",")
+  #   table$movies[i] <- movies; rm(movies)
+  #   
+  # }
+  
+  # rm(data)
   
   # set axis parameters
   ax <- list(
@@ -306,17 +332,17 @@ oscarsMonthsPloty <- function(data){
     showline = FALSE,
     showticklabels = FALSE,
     showgrid = FALSE
-    
+
   )
   plot <- plot_ly(
-    table, 
-    x=~month, 
-    y=~oscars, 
+    table,
+    x=~month,
+    y=~oscars,
     type="bar",
     hoverinfo = 'text',
     text = ~paste0(
-      '</br>', toupper(month),
-      '</br>Total Count: ', oscars
+      '</br> ', toupper(month),
+      '</br> Total Count: ', oscars
     )
   ) %>% layout(xaxis=ax, yaxis=ay)
   rm(table);rm(data)

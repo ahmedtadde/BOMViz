@@ -1,0 +1,40 @@
+YEAR,MOVIE,STUDIO,BOXOFFICE,NOMINATIONS,WINS,RELEASEDATE,WIN_PERCENTAGE
+2016,Moonlight (2016),A24,27.85,8,3,10/21,0.375
+2015,Spotlight,Open Road Films,45.06,6,2,11/06,0.3333
+2014,Birdman,Fox Searchlight,42.34,9,4,10/17,0.4444
+2013,12 Years a Slave,Fox Searchlight,56.67,9,3,10/18,0.3333
+2012,Argo,Warner Bros.,136.03,7,3,10/12,0.4286
+2011,The Artist,Weinstein Company,44.67,10,5,11/25,0.5
+2010,The King's Speech,Weinstein Company,135.45,12,4,11/26,0.3333
+2009,The Hurt Locker,Summit Entertainment,17.02,9,6,6/26,0.6667
+2008,Slumdog Millionaire,Fox Searchlight,141.32,10,8,11/12,0.8
+2007,No Country for Old Men,Miramax,74.28,8,4,11/09,0.5
+2006,The Departed,Warner Bros.,132.38,5,4,10/06,0.8
+2005,Crash,Lions Gate,54.58,6,3,5/06,0.5
+2004,Million Dollar Baby,Warner Bros.,100.49,7,4,12/15,0.5714
+2003,The Lord of the Rings: The Return of the King,New Line,377.03,11,11,12/17,1
+2002,Chicago,Miramax,170.69,13,6,12/27,0.4615
+2001,A Beautiful Mind,Universal,170.74,8,4,12/21,0.5
+2000,Gladiator,DreamWorks,187.71,12,5,5/05,0.4167
+1999,American Beauty,DreamWorks,130.1,8,5,9/15,0.625
+1998,Shakespeare in Love,Miramax,100.32,13,7,12/11,0.5385
+1997,Titanic,Paramount,600.79,14,11,12/19,0.7857
+1996,The English Patient,Miramax,78.68,12,9,11/15,0.75
+1995,Braveheart,Paramount,75.61,10,5,5/24,0.5
+1994,Forrest Gump,Paramount,329.69,13,6,7/06,0.4615
+1993,Schindler's List,Universal,96.07,12,7,12/15,0.5833
+1992,Unforgiven,Warner Bros.,101.16,9,4,8/07,0.4444
+1991,The Silence of the Lambs,Orion Pictures,130.74,7,5,2/14,0.7143
+1990,Dances with Wolves,Orion Pictures,184.21,12,7,11/09,0.5833
+1989,Driving Miss Daisy,Warner Bros.,106.59,9,4,12/15,0.4444
+1988,Rain Man,MGM,172.83,8,4,12/16,0.5
+1987,The Last Emperor,Columbia,43.98,9,9,11/20,1
+1986,Platoon,Orion Pictures,138.53,8,4,12/19,0.5
+1985,Out of Africa,Universal,87.07,11,7,12/20,0.6364
+1984,Amadeus,Orion Pictures,51.56,11,8,9/21,0.7273
+1983,Terms of Endearment,Paramount,108.42,11,5,11/23,0.4545
+1982,Gandhi,Columbia,52.77,11,8,12/10,0.7273
+1981,Chariots of Fire,Columbia,58.97,7,4,9/25,0.5714
+1980,Ordinary People,Paramount,54.77,7,4,9/19,0.5714
+1979,Kramer Vs. Kramer,Columbia,106.26,10,5,12/19,0.5
+1978,The Deer Hunter,Universal,48.98,9,5,12/08,0.5556

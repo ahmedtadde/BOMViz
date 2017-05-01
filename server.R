@@ -255,6 +255,7 @@ shinyServer(function(input, output) {
     
     
     # output$oscars_ranking <- renderPlotly({})
+    
     output$oscars_months <- renderPlotly({
       oscarsMonthsPloty(copy(resource.oscars()))
     })

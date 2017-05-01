@@ -64,15 +64,16 @@ shinyUI(fluidPage(
                         
                         tabPanel("Oscars",
                                  h2("Visual Ranking"),
-                                 p(class="text-small", "This session displays the visual ranking of oscars winning movies (2000-)
+                                 p(class="text-small", "This session displays the visual ranking of oscars 'Best Picture' winning movies (2000-)
                                    by plotting critical success against domestic box office"),
                                  hr(),
                                  
                                  plotlyOutput("oscars_ranking", height="auto", width="auto"),
                                  hr(),
                                  
-                                 h3("The Oscars Month"),
-                                 p(class="text-small", "According to the data, December is the most prolific month of oscars winning movies."),
+                                 h3("Oscars Season"),
+                                 p(class="text-small", "The data perfectly shows the so-called 'Oscars Season' with December and November as the most prolific month of oscars winning movies.
+                                   There has never been an oscars winning movie released in the first quarter of the year."),
                                  plotlyOutput("oscars_months", height="auto", width="auto"),
                                  hr(),
                                  
