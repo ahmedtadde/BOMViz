@@ -8,7 +8,7 @@ shinyServer(function(input, output) {
     })
     
     resource.oscars <- reactive({
-        return(copy(dataframes$oscars))
+        return(dataframes$oscars)
     })
     
     resource.actors <- reactive({
@@ -254,8 +254,10 @@ shinyServer(function(input, output) {
     })
     
     
-    # output$oscars_timeline <- renderPlotly({})
-    # output$oscars_months <- renderPlotly({})
+    # output$oscars_ranking <- renderPlotly({})
+    output$oscars_months <- renderPlotly({
+      oscarsMonthsPloty(copy(resource.oscars()))
+    })
     
     
     

@@ -5,10 +5,9 @@ libraries <- function(){
   p_load(XML)
   p_load(dplyr)
   p_load(shiny)
-  p_load(ggplot2)
   p_load(plotly)
   p_load(scales)
-  p_load(RColorBrewer)
+  p_load(stringi)
   p_load(grid)
   p_load(reshape2)
   p_load(data.table)
@@ -265,4 +264,61 @@ barPlotly <- function(peopleInput ="",role ="", metricInput, data){
   rm(list = c("colormap","df","ax", "ay"))
   
   return(thePlot)
+}
+
+
+
+
+
+
+# =========================================================================
+# @description: A barPlot showing release month frequencies for oscars moviews
+# @param: oscars dataframe
+# @return: plotly object for display
+# =========================================================================
+oscarsMonthsPloty <- function(data){
+  data[, FULLDATE:= paste0(data[,RELEASEDATE],"/",data[, YEAR])]
+  data[, MONTHS:= months.Date(as.Date(FULLDATE, "%m/%d/%Y"))]
+  table <- data[, .N, by = MONTHS]
+  names(table) <- c("month","oscars")
+  setorder(table, -oscars,month)
+  
+  # set axis parameters
+  ax <- list(
+    title = "",
+    zeroline = FALSE,
+    showline = FALSE,
+    showticklabels = TRUE,
+    showgrid = FALSE,
+    tickangle = 0,
+    tickfont = list(
+      family = "Courier New, monospace",
+      size = 15
+    )
+  )
+  ay <- list(
+    title = "Oscars (hover on bar for count)",
+    titlefont= list(
+      family = "Courier New, monospace",
+      size = 15
+    ),
+    zeroline = FALSE,
+    showline = FALSE,
+    showticklabels = FALSE,
+    showgrid = FALSE
+    
+  )
+  plot <- plot_ly(
+    table, 
+    x=~month, 
+    y=~oscars, 
+    type="bar",
+    hoverinfo = 'text',
+    text = ~paste0(
+      '</br>', toupper(month),
+      '</br>Total Count: ', oscars
+    )
+  ) %>% layout(xaxis=ax, yaxis=ay)
+  rm(table);rm(data)
+  return(plot)
 }
