@@ -36,12 +36,12 @@ get_data_studios <- function() {
 
 
 # =========================================================================
-# function get_data_oscars
+# function get_bom_oscars
 #
 # @description: get Oscar data for all years from boxofficemojo
-# @return: dataframe of Oscar movies
+# @return: dataframe of Oscar movies' box office
 # =========================================================================
-get_data_oscars <- function(updateRecords = "") {
+get_bom_oscars <- function(updateRecords = "") {
   
   if(tolower(updateRecords) %in% "update"){
     url <- "http://www.boxofficemojo.com/oscar/?sort=studio&order=ASC&p=.htm"
@@ -66,12 +66,53 @@ get_data_oscars <- function(updateRecords = "") {
              WIN_PERCENTAGE = round(WINS / NOMINATIONS, 4)) %>%
       arrange(-YEAR)
     
-    data.table::fwrite(df, "data/oscars.csv")
-    return(data.table(df))
+    data.table::fwrite(df, "data/oscars_bom.csv")
+    return(setorder(data.table(df), MOVIE))
   }else{
-    return(fread('data/oscars.csv'))
+    return(setorder(fread('data/oscars_bom.csv'), MOVIE))
     
   }
+}
+
+
+
+
+# =========================================================================
+# function get_data_oscars
+#
+# @description: get Oscar data for all years from boxofficemojo
+# @return: dataframe of Oscar movies' critics
+# =========================================================================
+get_data_oscars <- function() {
+  data <- fread("data/oscars_omdb.csv")
+  Cols <- c("BoxOffice","Year","Country","DVD","imdbID",
+            "Language","Poster","imdbVotes","Response",
+            "Type","Website","imdbRating","Production"
+          )
+  
+  data[, (Cols) := NULL]
+  
+  data$Title[1] <- "Moonlight (2016)"
+  data$Title[3] <- "Birdman"
+  data$Title[which(data$Title %in% "Kramer vs. Kramer")] <- "Kramer Vs. Kramer"
+  
+  data[, MOVIE:= Title]; data[,Title:= NULL]
+  
+  
+  data[, c("Metascore","rotten"):= list(as.numeric(Metascore), as.numeric(rotten))]
+  data$Metascore[which(is.na(data$Metascore))] <- mean(data$Metascore, na.rm = TRUE)
+  
+  data[, critics_score:= (Metascore+rotten)/2]
+  
+  
+  bomTable <- setkey(get_bom_oscars(),MOVIE)
+  setkey(data, MOVIE)
+  
+  data <- bomTable[data]
+  
+  
+  
+  return(data)
 }
 
 

@@ -1,7 +1,7 @@
 
 source("data/functions.R")
 libraries()
-oscars.movies <- dataframes$oscars$MOVIE
+data.table::fwrite(dataframes$oscars, "data/oscars.csv")
 
 
 
