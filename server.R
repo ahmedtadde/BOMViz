@@ -52,7 +52,12 @@ shinyServer(function(input, output) {
     
     output$oscars_datable <- DT::renderDataTable({
       datatable(
-        resource.oscars(),
+        setorder(resource.oscars()$data[,.(RELEASEDATE,YEAR,MOVIE,STUDIO,
+                                           BOXOFFICE,NOMINATIONS, WINS, 
+                                           WIN_PERCENTAGE)
+                                        ],
+                 -YEAR
+                ),
         filter = 'top',
         rownames = FALSE,
         selection="multiple", 
@@ -254,10 +259,12 @@ shinyServer(function(input, output) {
     })
     
     
-    # output$oscars_ranking <- renderPlotly({})
+    output$oscars_ranking <- renderPlotly({
+      oscarsRankingPlotly(resource.oscars())
+    })
     
     output$oscars_months <- renderPlotly({
-      oscarsMonthsPloty(copy(resource.oscars()))
+      oscarsMonthsPloty(copy(resource.oscars()$data))
     })
     
     

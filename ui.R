@@ -63,9 +63,9 @@ shinyUI(fluidPage(
             tabsetPanel(id="tabset",
                         
                         tabPanel("Oscars",
-                                 h2("Visual Ranking"),
-                                 p(class="text-small", "This session displays the visual ranking of oscars 'Best Picture' winning movies (2000-)
-                                   by plotting critical success against domestic box office"),
+                                 h2("Ranking"),
+                                 p(class="text-small", "This session displays the visual ranking of oscars 'Best Picture' winning movies (1978-)
+                                   by plotting prestige (critics + oscars performance) against domestic box office"),
                                  hr(),
                                  
                                  plotlyOutput("oscars_ranking", height="auto", width="auto"),

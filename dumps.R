@@ -1,7 +1,8 @@
 
 source("data/functions.R")
 libraries()
-data.table::fwrite(dataframes$oscars, "data/oscars.csv")
+
+sapply(cars$speed, function(element){ ifelse(element>mean(cars$speed),"Greater than avg","less than avg")})
 
 
 

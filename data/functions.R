@@ -78,10 +78,46 @@ get_bom_oscars <- function(updateRecords = "") {
 
 
 # =========================================================================
+# function vizClass for Oscars Ranking
+#
+# @description: 
+# @return: 
+# =========================================================================
+
+vizClass <- function(category){
+  switch(
+    category,
+    "ABOVE AVERAGE_ABOVE AVERAGE" = "TIER-I",
+    "BELOW AVERAGE_ABOVE AVERAGE" = "TIER-II",
+    "ABOVE AVERAGE_BELOW AVERAGE" = "TIER-III",
+    "BELOW AVERAGE_BELOW AVERAGE" = "TIER-IV"
+  )
+}
+
+
+# =========================================================================
+# function vizColorClass for Oscars Ranking
+#
+# @description: 
+# @return: 
+# =========================================================================
+
+vizColorClass <- function(class){
+  switch(
+    class,
+    "TIER-I" = "#ff9800",
+    "TIER-II" ="#72142e",
+    "TIER-III" = "#0f2a56",
+    "TIER-IV"="#717471"
+  )
+}
+
+
+# =========================================================================
 # function get_data_oscars
 #
-# @description: get Oscar data for all years from boxofficemojo
-# @return: dataframe of Oscar movies' critics
+# @description: 
+# @return: 
 # =========================================================================
 get_data_oscars <- function() {
   data <- fread("data/oscars_omdb.csv")
@@ -105,14 +141,37 @@ get_data_oscars <- function() {
   data[, critics_score:= (Metascore+rotten)/2]
   
   
+  
   bomTable <- setkey(get_bom_oscars(),MOVIE)
   setkey(data, MOVIE)
   
   data <- bomTable[data]
   
   
+  data[, oscars_score := (NOMINATIONS/10) + WIN_PERCENTAGE
+       ][, PRESTIGE := sqrt(oscars_score * critics_score)
+         ][, PRESTIGE_CATEGORY := sapply(PRESTIGE, 
+                                    function(score){
+                                      ifelse(score>mean(PRESTIGE),"ABOVE AVERAGE","BELOW AVERAGE")
+                                      }
+                                    )
+           ][, BOXOFFICE_CATEGORY := sapply(BOXOFFICE, 
+                                              function(value){
+                                                ifelse(value> mean(BOXOFFICE),"ABOVE AVERAGE","BELOW AVERAGE")
+                                              }
+                                            )
+             ][, CLASS := sapply(paste0(BOXOFFICE_CATEGORY,"_",PRESTIGE_CATEGORY), vizClass)
+               ][, CLASS := factor(CLASS, levels = c("TIER-IV","TIER-III","TIER-II","TIER-I"), ordered = TRUE )
+                 ][, OVERALLSCORE := sqrt(PRESTIGE * BOXOFFICE)]
   
-  return(data)
+  setorder(data, OVERALLSCORE)[, OSCARSRANKING:= dim(data)[1]:1]
+  
+  colormap <- sapply(as.character(data[, CLASS]), vizColorClass)
+  names(colormap) <- data[,MOVIE]
+  
+  
+  
+  return(list("data" = data, "colormap" = colormap))
 }
 
 
@@ -387,5 +446,81 @@ oscarsMonthsPloty <- function(data){
     )
   ) %>% layout(xaxis=ax, yaxis=ay)
   rm(table);rm(data)
+  return(plot)
+}
+
+
+
+
+# =========================================================================
+# @description: A Plot showing the visual ranking of Oscars movies
+# @param: list with oscars dataframe and colormap 
+# @return: plotly object for display
+# =========================================================================
+
+oscarsRankingPlotly <- function(someList){
+  
+  table <- copy(someList$data)[, MOVIE := factor(MOVIE, levels = MOVIE, ordered = TRUE)]
+  
+  ax <- list(
+    title = "Domestic Box Office",
+    titlefont= list(
+      family = "Courier New, monospace",
+      size = 17
+    ),
+    zeroline = FALSE,
+    showline = FALSE,
+    showticklabels = TRUE,
+    showgrid = FALSE
+  )
+  
+  ay <- list(
+    title = "Prestige Level",
+    titlefont= list(
+      family = "Courier New, monospace",
+      size = 17
+    ),
+    zeroline = FALSE,
+    showline = FALSE,
+    showticklabels = TRUE,
+    showgrid = FALSE
+    
+  )
+  
+  # colormap <- c()
+  # names(colormap) <- c("TIER-I","TIER-II")
+  # 
+  plot <- plot_ly(
+    table,
+    x=~BOXOFFICE,
+    y=~PRESTIGE,
+    color = ~MOVIE,
+    colors = someList$colormap,
+    # size = ~OVERALLSCORE,
+    sort = FALSE,
+    opacity = ~PRESTIGE,
+    mode="markers",
+    type = "scatter",
+    marker = list(size = 17),
+    sorted = FALSE,
+    hoverinfo = 'text',
+    text = ~paste0(
+      '</br> ', toupper(MOVIE),
+      '</br> Overall Ranking (1978-): ', OSCARSRANKING,
+      '</br> Released: ', Released,
+      '</br> Studio: ', STUDIO,
+      '</br> Genre: ', Genre,
+      '</br> Rated: ', Rated,
+      '</br> Runtime: ', Runtime,
+      '</br> Director: ', Director,
+      '</br> Writer(s): ', Writer,
+      '</br> Actors: ', Actors,
+      '</br> Awards: ', Awards,
+      '</br> Oscars Nominations: ', NOMINATIONS,
+      '</br> Metacritic Score: ', as.integer(Metascore),'%',
+      '</br> Tomameter: ', as.integer(rotten),'%',
+      '</br> Domestic BO: $', BOXOFFICE,' MILLIONS'
+    )
+  ) %>% layout(xaxis=ax, yaxis=ay, legend = list(x = -0.5, y= 1)) -> plot
   return(plot)
 }
