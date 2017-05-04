@@ -22,7 +22,7 @@ Throughout the application, the user is empowered with selection widgets to zoom
 ## Visualizations:
 - **Studios:** This section displays visualizations of studio rankings by box office over time, as well as a plot of movies produced by studios over time. You can use the highlight filters to the left to highlight specific studios ranked in the legends.
 
-- **Oscars:** This session shows the ranking list and visual clustering of oscars 'Best Picture' winning movies (1978-) by calculating an overall score and plotting prestige (critics & oscars performance score) against domestic box office. The so-called 'Oscars Season' is also visually illustrated.
+- **Oscars:** This session shows the ranking list and visual clustering of oscars 'Best Picture' winning movies (1978-) by calculating an overall score and plotting prestige (critics & oscars performance score) against domestic box office. The so-called 'Oscars Season' is also visually illustrated. The o
 
 - **Actors:** This section displays visualizations for the top 50 actors by box office numbers. You can use the highlight filters to the left to highlight specific actors ranked in the legends.
 
@@ -33,6 +33,23 @@ Throughout the application, the user is empowered with selection widgets to zoom
 ------
 
 ## Other notes:
+
+- The `Prestige` index of each Oscars movie is calculated by: 
+
+
+        * Calculating `critics performance` by taking the mean of its metascore and tomatometer.
+  
+        * Calculating `oscars performance` by adding its win percentage (#wins/#nominations) to 
+          its nominations divided by 10. 
+  
+        * Finally, the `Prestige` index is calculated by taking the geometric mean of 
+          the `critics performance` and `oscars performance` 
+     
+
+- The `Overall Score` index of each Oscars movie is calculated  by taking the geometric mean of its domestic `Box Office` and `Prestige` index.
+     
+
+- The engineered features `Prestige` and `Overall Score` are not gospel, obviously. They are subjective and simplistic; it could definitely be done differently or improved upon. Suggestions welcomed.
 
 - Download the "cleaned" datasets for each tab from the `Data` section using the download buttons labeled 'CSV', 'EXCEL' found below the `Data` section header.
 

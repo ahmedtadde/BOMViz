@@ -67,15 +67,11 @@ shinyUI(fluidPage(
         mainPanel(
             tabsetPanel(id="tabset",
                         
-                        tabPanel("About",
-                                 fluidRow(includeMarkdown("README.md"))
-                                ),
-                        
                         tabPanel("Oscars",
                                  h2("Ranking"),
-                                 p(class="text-small", "This session shows the ranking list and visual clustering of oscars 'Best Picture' winning movies (1978-)
-                                   by calculating an overall score and plotting prestige (critics & oscars performance score) against domestic box office. The movies are color coded to represent the combined critical 
-                                   and box office performance relative to the group."),
+                                 p(class="text-small", "This session shows the ranking list and visual clustering of Oscars Best Pictures (1978-)
+                                   by calculating an overall score and plotting prestige (critics & oscars performance score) against domestic box office. 
+                                   The movies are color coded to represent the combined critical and box office performance relative to the group."),
                                  
                                  tags$ul(class="text-small",
                                          tags$li(p(class="tier1_description"," Above Average Prestige & Above Average Box Office Revenue")),
@@ -106,7 +102,7 @@ shinyUI(fluidPage(
                         
                         tabPanel("Actors",
                                  h2("Top 50 Actors"),
-                                 p(class="text-small", "This section displays visualizations for the top 50 actors by box office numbers."),
+                                 p(class="text-small", "This section displays visualization for the top 50 actors by box office numbers."),
                                  hr(),
                                  
                                  h3("Compare Box Office Numbers"),
@@ -124,7 +120,7 @@ shinyUI(fluidPage(
                         
                         tabPanel("Directors",
                                  h2("Top 50 Directors"),
-                                 p(class="text-small", "This section displays visualizations for the top 50 directors by box office numbers."),
+                                 p(class="text-small", "This section displays visualization for the top 50 directors by box office numbers."),
                                  hr(),
                                  
                                  h3("Compare Box Office Numbers"),
@@ -142,7 +138,7 @@ shinyUI(fluidPage(
                         
                         tabPanel("Producers",
                                  h2("Top 50 Producers"),
-                                 p(class="text-small", "This section displays visualizations for the top 50 producers by box office  numbers."),
+                                 p(class="text-small", "This section displays visualization for the top 50 producers by box office  numbers."),
                                  hr(),
                                  
                                  h3("Compare Box Office Numbers"),
@@ -190,6 +186,11 @@ shinyUI(fluidPage(
                                  p(class="text-small-italic", "You can download the data with the download buttons below."),
                                  dataTableOutput("studios_datatable"),
                                  hr()
+                        ),
+                        
+                        
+                        tabPanel("About",
+                                 fluidRow(includeMarkdown("README.md"))
                         )
             ),
             width=9
