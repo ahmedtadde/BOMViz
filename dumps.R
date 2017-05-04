@@ -1,11 +1,4 @@
 
-source("data/functions.R")
-libraries()
-
-sapply(cars$speed, function(element){ ifelse(element>mean(cars$speed),"Greater than avg","less than avg")})
-
-
-
 # if(role %in% "" | peopleInput %in% ""){
 #   # get data
 #   df <- setorderv(copy(data), metricInput)[,MOVIE:=factor(MOVIE, levels = MOVIE, ordered = TRUE )]

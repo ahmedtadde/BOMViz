@@ -147,3 +147,49 @@ label[for=producers_producer3] {
     font-family: 'Ubuntu', sans-serif;
     font-size: 18px;
 }
+
+.tier1_description {
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 12px;
+    background-color: #ff9800;
+    background-size: 400px;
+    width:400px;
+    color: white;
+    text-align: center;
+}
+
+
+.tier2_description {
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 12px;
+    background-color: #72142e;
+    background-size: 400px;
+    width:400px;
+    color: white;
+    text-align: center;
+}
+
+
+
+.tier3_description {
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 12px;
+    background-color: #0f2a56;
+    color: white;
+    background-size: 400px;
+    width:400px;
+    text-align: center;
+}
+
+
+
+.tier4_description {
+    
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 12px;
+    background-color: #717471;
+    background-size: 400px;
+    width:400px;
+    color: white;
+    text-align: center;
+}

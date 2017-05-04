@@ -64,8 +64,17 @@ shinyUI(fluidPage(
                         
                         tabPanel("Oscars",
                                  h2("Ranking"),
-                                 p(class="text-small", "This session displays the visual ranking of oscars 'Best Picture' winning movies (1978-)
-                                   by plotting prestige (critics + oscars performance) against domestic box office"),
+                                 p(class="text-small", "This session shows the ranking list and visual clustering of oscars 'Best Picture' winning movies (1978-)
+                                   by calculating an overall score and plotting prestige (critics & oscars performance score) against domestic box office. The movies are color coded to represent the combined critical 
+                                   and box office performance relative to the group."),
+                                 
+                                 tags$ul(class="text-small",
+                                         tags$li(p(class="tier1_description"," Above Average Prestige & Above Average Box Office Revenue")),
+                                         tags$li(p(class="tier2_description"," Above Average Prestige & Below Average Box Office Revenue")),
+                                         tags$li(p(class="tier3_description"," Below Average Prestige & Above Average Box Office Revenue")),
+                                         tags$li(p(class="tier4_description"," Below Average Prestige & Below Average Box Office Revenue"))
+                                        ),
+                                 
                                  hr(),
                                  
                                  plotlyOutput("oscars_ranking", height="auto", width="auto"),
@@ -73,7 +82,7 @@ shinyUI(fluidPage(
                                  
                                  h3("Oscars Season"),
                                  p(class="text-small", "The data perfectly shows the so-called 'Oscars Season' with December and November as the most prolific month of oscars winning movies.
-                                   There has never been an oscars winning movie released in the first quarter of the year."),
+                                   There has never been an oscars winning movie released in the January, March, or April."),
                                  plotlyOutput("oscars_months", height="auto", width="auto"),
                                  hr(),
                                  

@@ -389,25 +389,9 @@ oscarsMonthsPloty <- function(data){
   data[, FULLDATE:= paste0(data[,RELEASEDATE],"/",data[, YEAR])]
   data[, MONTH:= months.Date(as.Date(FULLDATE, "%m/%d/%Y"))]
   table <- data[, .N, by = MONTH]
-  # table[, MOVIES:= rep("", length(table$MONTH))]
-  # names(table) <- c("month","oscars","movies")
   
   names(table) <- c("month","oscars")
   setorder(table, -oscars,month)
-  
-  # foreach(i= 1:length(table$month))%do%{
-  #   movies <- data[MONTH %in% table$month[i]][,MOVIE]
-  #   
-  #   # foreach(j=1:length(movies), .combine = c)%do%{
-  #   #   paste0("<li> ", movies[j], " </li> ")
-  #   # } -> movies
-  #   
-  #   movies <- paste0(movies,collapse = ",")
-  #   table$movies[i] <- movies; rm(movies)
-  #   
-  # }
-  
-  # rm(data)
   
   # set axis parameters
   ax <- list(
@@ -487,22 +471,17 @@ oscarsRankingPlotly <- function(someList){
     
   )
   
-  # colormap <- c()
-  # names(colormap) <- c("TIER-I","TIER-II")
-  # 
+  
   plot <- plot_ly(
     table,
     x=~BOXOFFICE,
     y=~PRESTIGE,
     color = ~MOVIE,
     colors = someList$colormap,
-    # size = ~OVERALLSCORE,
     sort = FALSE,
-    opacity = ~PRESTIGE,
     mode="markers",
     type = "scatter",
     marker = list(size = 17),
-    sorted = FALSE,
     hoverinfo = 'text',
     text = ~paste0(
       '</br> ', toupper(MOVIE),
@@ -513,7 +492,6 @@ oscarsRankingPlotly <- function(someList){
       '</br> Rated: ', Rated,
       '</br> Runtime: ', Runtime,
       '</br> Director: ', Director,
-      '</br> Writer(s): ', Writer,
       '</br> Actors: ', Actors,
       '</br> Awards: ', Awards,
       '</br> Oscars Nominations: ', NOMINATIONS,
