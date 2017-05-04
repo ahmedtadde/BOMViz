@@ -2,16 +2,16 @@ shinyUI(fluidPage(
     tags$head(tags$link(rel="stylesheet", type="text/css", href="app.css")),
     tags$head(tags$link(rel="stylesheet", type="text/css", href="https://fonts.googleapis.com/css?family=Architects+Daughter|Ubuntu")),
     
-    titlePanel("Box Office Explorer"),
+    titlePanel("Oscars and Hollywood Box Office Explorer"),
     
     sidebarLayout(
         sidebarPanel(
             p(class="text-small",
               a(href="https://ahmedtadde.github.io/DataQuest", target="_blank", "by Ahmed Tadde"),
-              a(href="https://github.com/ahmedtadde/BOMViz", target="_blank", icon("github")), " | ",
+              a(href="https://github.com/ahmedtadde/hollywoodViz", target="_blank", icon("github")), " | ",
               a(href="https://www.linkedin.com/in/ahmedtadde", target="_blank", icon("linkedin"))),
             hr(),
-            p(class="text-small", "Data visualizations on Oscars and Top Hollywood Personalities. Data derived from ",
+            p(class="text-small", "Data visualizations on Oscars Best Pictures since 1978, Top Studios, and Top Hollywood Personalities. Data derived from ",
               a(href="http://www.boxofficemojo.com/", target="_blank", "Box Office Mojo"),
               " and", a(href="http://www.omdbapi.com/", target="_blank", "The Open Movie Database")),
             hr(),
@@ -56,11 +56,20 @@ shinyUI(fluidPage(
                             value=c(min(choices$studios_years), max(choices$studios_years)), step=1, sep = "")
             ),
             
+            
+            conditionalPanel(
+              condition="input.tabset == 'About'"
+            ),
+            
             width=3
         ),
         
         mainPanel(
             tabsetPanel(id="tabset",
+                        
+                        tabPanel("About",
+                                 fluidRow(includeMarkdown("README.md"))
+                                ),
                         
                         tabPanel("Oscars",
                                  h2("Ranking"),

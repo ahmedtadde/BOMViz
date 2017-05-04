@@ -173,7 +173,7 @@ shinyServer(function(input, output) {
                     autotick = TRUE
                   )
         ay <- list(
-                    title = "Box Office",
+                    title = "Domestic Box Office",
                     titlefont= list(
                                     family = "Courier New, monospace",
                                     size = 15
@@ -200,7 +200,7 @@ shinyServer(function(input, output) {
                         '</br> Box Office Total: $', BOXOFFICE,' MILLIONS'
                         )
         )%>%
-          layout(xaxis = ax, yaxis = ay)
+          layout(xaxis = ax, yaxis = ay, legend = list(x =-0.5, y =1))
     })
     
     
@@ -255,7 +255,7 @@ shinyServer(function(input, output) {
                         '</br> Average per Movie: $', floor(avg),' MILLIONS'
                         )
         )%>%
-          layout(xaxis = ax, yaxis = ay, legend=list(traceorder="reversed"))
+          layout(xaxis = ax, yaxis = ay, legend=list(traceorder="reversed", x =-0.5, y =1))
     })
     
     

@@ -1,21 +1,23 @@
 # Load libraries
 
 libraries <- function(){
-  library(pacman)
-  p_load(XML)
-  p_load(dplyr)
-  p_load(shiny)
-  p_load(plotly)
-  p_load(scales)
-  p_load(stringi)
-  p_load(grid)
-  p_load(reshape2)
-  p_load(data.table)
-  p_load(DT)
-  p_load(foreach)
+  library(XML)
+  library(dplyr)
+  library(shiny)
+  library(plotly)
+  library(scales)
+  library(stringi)
+  library(grid)
+  library(reshape2)
+  library(data.table)
+  library(DT)
+  library(foreach)
+  library(markdown)
   options(warn=-1) # turn off unneccessary NA warnings in the code from XML library
 
 }
+
+
 # =========================================================================
 # function get_data_studio
 #
@@ -351,7 +353,7 @@ barPlotly <- function(peopleInput ="",role ="", metricInput, data){
         '</br> Best Grossing Movie: ', BEST_PICTURE
       )
     )%>%
-      layout(xaxis = ax, yaxis = ay) -> thePlot
+      layout(xaxis = ax, yaxis = ay, legend = list(x = -0.5, y= 1)) -> thePlot
   }
   
   plot_ly(
@@ -368,7 +370,7 @@ barPlotly <- function(peopleInput ="",role ="", metricInput, data){
       '</br> Best Grossing Movie: ', BEST_PICTURE
     )
   )%>%
-    layout(xaxis = ax, yaxis = ay) -> thePlot
+    layout(xaxis = ax, yaxis = ay, legend = list(x = -0.5, y= 1)) -> thePlot
   
   rm(list = c("colormap","df","ax", "ay"))
   
@@ -423,6 +425,7 @@ oscarsMonthsPloty <- function(data){
     x=~month,
     y=~oscars,
     type="bar",
+    marker = list(color="#ff9800"),
     hoverinfo = 'text',
     text = ~paste0(
       '</br> ', toupper(month),
